@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background1">
+
+
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginLeft="2dp">
+
+        <LinearLayout
+            android:id="@+id/rg_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <!--coupon-->
+            <LinearLayout
+                android:id="@+id/one_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lin_height"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@drawable/lin_selected">
+
+                <ImageView
+                    android:id="@+id/one_img"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:src="@drawable/coupon_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_icon_height"
+                    android:text="Coupon"
+                    android:textColor="@color/menu_icon_color"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+            <!--Assets-->
+            <LinearLayout
+                android:id="@+id/two_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lin_height"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@drawable/lin_selected">
+
+                <ImageView
+                    android:id="@+id/two_img"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:src="@drawable/assets_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_icon_height"
+                    android:text="Assets"
+                    android:textColor="@color/menu_icon_color"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+            <!--Receive-->
+            <LinearLayout
+                android:id="@+id/three_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lin_height"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@drawable/lin_selected">
+
+                <ImageView
+                    android:id="@+id/three_img"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:src="@drawable/receive_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_icon_height"
+                    android:text="Receive"
+                    android:textColor="@color/menu_icon_color"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+            <!--Account-->
+            <LinearLayout
+                android:id="@+id/four_lin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lin_height"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@drawable/lin_selected">
+
+                <ImageView
+                    android:id="@+id/four_img"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:src="@drawable/me" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_icon_height"
+                    android:text="Account"
+                    android:textColor="@color/menu_icon_color"
+                    android:textSize="9sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--界限-->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:background="#797979" />
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+
+</LinearLayout>
