@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--券-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/coupon_back1" />
+
+        <LinearLayout
+            android:id="@+id/coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="110dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/coupon">
+
+
+            <LinearLayout
+                android:id="@+id/coupon_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="1"
+                    android:text="自定义"
+                    android:textColor="#797979"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/coupon_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btn_addImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/add_image" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="有效期:"
+                    android:textColor="#F9CF96"
+                    android:textSize="5sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/coupon_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="副券"
+                    android:textColor="#797979"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/kuang" />
+
+                <Button
+                    android:layout_width="35dp"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/kuang"
+                    android:text="创建"
+                    android:textColor="#F9CF96"
+                    android:textSize="6sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/seal_size"
+            android:layout_height="@dimen/seal_size"
+            android:layout_marginLeft="120dp"
+            android:src="@drawable/seal" />
+
+
+        <ImageView
+            android:layout_width="@dimen/seal_size"
+            android:layout_height="@dimen/seal_size"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="120dp"
+            android:layout_marginLeft="120dp"
+            android:src="@drawable/seal" />
+    </RelativeLayout>
+
+</RelativeLayout>

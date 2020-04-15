@@ -3,13 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.TabAssetsFragment">
+    tools:context=".costomer.fragment.TabAssetsFragment"
+    android:layout_marginTop="30dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginBottom="100dp">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Assets"
-        android:textSize="100sp"/>
+        android:textSize="23sp"/>
+
+
+
+    <!--内容-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp">
+
+
+        <!--listview的标签-->
+        <ListView
+            android:id="@+id/lv_assets"
+            android:layout_width="350dp"
+            android:layout_height="450dp"
+            android:divider="@null"
+            android:dividerHeight="20dp"/>
+
+
+    </RelativeLayout>
 
 </FrameLayout>

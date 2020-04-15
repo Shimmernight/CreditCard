@@ -3,13 +3,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.TabCouponFragment">
+    android:layout_marginLeft="30dp"
+    android:layout_marginTop="30dp"
+    android:layout_marginRight="30dp"
+    tools:context=".costomer.fragment.TabCouponFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coupon"
+        android:textSize="23sp" />
+
+    <!--内容-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="coupon"
-        android:textSize="100dp"/>
+        android:layout_marginTop="110dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
+
+        <!--券-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/coupon_back1" />
+
+            <LinearLayout
+                android:id="@+id/coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:background="@drawable/coupon"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/coupon_left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="1"
+                        android:text="自定义"
+                        android:textColor="#797979"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/coupon_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="11"
+                    android:orientation="vertical"
+                    android:padding="3dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="8"
+                        android:background="@drawable/add_image"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/photo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/photo_back2" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/data"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="有效期:"
+                        android:textColor="#F9CF96"
+                        android:textSize="8sp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/coupon_right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="副券"
+                        android:textColor="#797979"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@drawable/kuang"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textColor="#797979"
+                            android:textSize="6sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="35dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/touch_inscription"
+                android:layout_width="@dimen/seal_size"
+                android:layout_height="@dimen/seal_size"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="120dp"
+                android:layout_marginLeft="120dp"
+                android:background="@drawable/seal">
+
+                <TextView
+                    android:id="@+id/inscription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="某某某纪念章"
+                    android:textSize="7dp"
+                    android:textColor="#F9CF96"
+                    android:maxLines="2"
+                    android:layout_marginLeft="19dp"
+                    android:layout_marginTop="30dp"
+                    android:rotation="-25"
+                    android:maxEms = "3"
+                    />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_OK"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/bn_selector"
+            android:text="创建并保留"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_giveTo"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bn_selector"
+            android:text="赠送"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 </FrameLayout>

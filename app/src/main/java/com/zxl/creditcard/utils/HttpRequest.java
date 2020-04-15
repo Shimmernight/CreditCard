@@ -1,0 +1,88 @@
+package com.zxl.creditcard.utils;
+
+import javax.net.ssl.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.cert.X509Certificate;
+import java.util.Map;
+
+public class HttpRequest {
+
+    //忽略证书的认证
+    private static void SkipCertificateValidation() throws Exception {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+            public X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }
+        };
+        // Install the all-trusting trust manager
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        // Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+    }
+
+    /**
+     * 请求方式
+     *
+     * @param urlStr 接口请求链接
+     * @return
+     * @throws Exception
+     */
+    public static String postRequestWithAuth(String urlStr,  Map<String, Object> params) throws Exception {
+        SkipCertificateValidation();//跳过证书认证
+        URL url = new URL(urlStr);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setDoOutput(true);
+        con.setDefaultUseCaches(false);//post请求不需要缓存
+        con.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+
+        //设置请求要加的参数
+        SetRequestValue(con.getOutputStream(),params);
+
+        con.setConnectTimeout(5000);
+        int code = con.getResponseCode();
+        if (code != 200) {
+            return "接口发生未处理异常，请求状态码："+code;
+            //con.getErrorStream()  可获得出错后的返回流
+        }
+        //接收请求参数
+        InputStreamReader reader = new InputStreamReader(con.getInputStream(),"GB2312");
+        BufferedReader buffer = new BufferedReader(reader);
+        return buffer.readLine();
+    }
+
+    //将参数拼接起来
+    private static void SetRequestValue(OutputStream outputStream, Map<String, Object> params) throws IOException {
+        if (params != null && params.size() > 0) {
+            DataOutputStream out = new DataOutputStream(outputStream);
+            StringBuilder requestString = new StringBuilder();
+            for (String key : params.keySet()) {
+                requestString.append(key.trim()).append("=").append(URLEncoder.encode(params.get(key).toString(), "UTF-8").trim()).append("&");
+            }
+            System.out.println("原始长度：" + requestString);
+            System.out.println("需要的字符串：" + requestString.substring(0, requestString.length() - 1));
+            out.writeBytes(requestString.toString());
+            out.flush();
+            out.close();
+        }
+    }
+}

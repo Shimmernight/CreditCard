@@ -3,13 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.TabReceiveFragment">
-
+    tools:context=".costomer.fragment.TabReceiveFragment"
+    android:layout_marginTop="30dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginBottom="50dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Receive"
-        android:textSize="100dp"/>
+        android:textSize="23sp"/>
+
+    <!--内容-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="110dp">
+
+
+        <!--listview的标签-->
+        <ListView
+            android:id="@+id/lv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

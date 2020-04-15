@@ -1,4 +1,4 @@
-package com.zxl.creditcard.view;
+package com.zxl.creditcard.costomer.view;
 
 /**
  * @项目名称: CreditCard
@@ -8,25 +8,39 @@ package com.zxl.creditcard.view;
  * @描述: ${TODO}
  **/
 
-import android.net.Uri;
+import android.app.ProgressDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.zxl.creditcard.R;
-import com.zxl.creditcard.fragment.TabAccountFragment;
-import com.zxl.creditcard.fragment.TabAssetsFragment;
-import com.zxl.creditcard.fragment.TabCouponFragment;
-import com.zxl.creditcard.fragment.TabReceiveFragment;
+import com.zxl.creditcard.adpter.CouponAdapter;
+import com.zxl.creditcard.adpter.DeleteCoupon;
+import com.zxl.creditcard.costomer.data.CouponDao;
+import com.zxl.creditcard.costomer.data.DbHelper;
+import com.zxl.creditcard.costomer.entity.CouponInfo;
+import com.zxl.creditcard.costomer.fragment.TabAccountFragment;
+import com.zxl.creditcard.costomer.fragment.TabAssetsFragment;
+import com.zxl.creditcard.costomer.fragment.TabCouponFragment;
+import com.zxl.creditcard.costomer.fragment.TabReceiveFragment;
+import com.zxl.creditcard.utils.Utils;
 
-public class MainMaenu extends AppCompatActivity implements View.OnClickListener, TabCouponFragment.OnFragmentInteractionListener, TabAssetsFragment.OnFragmentInteractionListener, TabReceiveFragment.OnFragmentInteractionListener, TabAccountFragment.OnFragmentInteractionListener {
+import java.util.List;
 
+public class MainMenu extends AppCompatActivity implements View.OnClickListener,DeleteCoupon,TransPage{
+
+    String TAG = "MainMenu";
     private LinearLayout mOneLin, mTwoLin, mThreeLin,mFourLin;
     private ImageView mOneImg,mTwoImg,mThreeImg, mFourImg;
 
@@ -38,10 +52,21 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
+    private  DbHelper dbHelper;
+    private SQLiteDatabase db;
+
+    //将经常用的三个对象定义在上面
+    List<CouponInfo> list;
+    public CouponAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_menu);
+        setContentView(R.layout.activity_menu);
+
+        dbHelper = new DbHelper(this);
+        //获取权限
+        db = dbHelper.getWritableDatabase();
+
         initView();
         //获取FragmentManager对象
         manager = getSupportFragmentManager();
@@ -66,6 +91,9 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
         mTwoLin.setOnClickListener(this);
         mThreeLin.setOnClickListener(this);
         mFourLin.setOnClickListener(this);
+
+        //适配器
+        adapter = new CouponAdapter(this);
     }
 
     @Override
@@ -86,6 +114,7 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+    //页面跳转
     public void setSwPage(int i) {
         //获取FragmentManager对象
         manager = getSupportFragmentManager();
@@ -99,6 +128,7 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
                 mOneLin.setSelected(true);
                 if (mOneFragment == null) {
                     mOneFragment = new TabCouponFragment();
+                    mOneFragment.setTransPage(this);
                     transaction.add(R.id.fl_container, mOneFragment);
                 } else {
                     //如果对应的Fragment已经实例化，则直接显示出来
@@ -106,16 +136,20 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
                 }
                 break;
             case 1:
-                reLinSelect();
-                mTwoLin.setSelected(true);
-                if (mTwoFragment == null) {
-                    mTwoFragment = new TabAssetsFragment();
-                    transaction.add(R.id.fl_container, mTwoFragment);
-                } else {
-                    //如果对应的Fragment已经实例化，则直接显示出来
-                    transaction.show(mTwoFragment);
-                }
-                break;
+            reLinSelect();
+            mTwoLin.setSelected(true);
+            if (mTwoFragment == null) {
+                mTwoFragment = new TabAssetsFragment();
+                mTwoFragment.setDeletCoupon(this);
+                mTwoFragment.setActivity(this);
+                transaction.add(R.id.fl_container, mTwoFragment);
+                updataData();
+            } else {
+                //如果对应的Fragment已经实例化，则直接显示出来
+                transaction.show(mTwoFragment);
+                updataData();
+            }
+            break;
             case 2:
                 reLinSelect();
                 mThreeLin.setSelected(true);
@@ -156,6 +190,7 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
         if (mFourFragment != null) {
             transaction.hide(mFourFragment);
         }
+
     }
 
     //初始化底部菜单选择状态
@@ -166,8 +201,60 @@ public class MainMaenu extends AppCompatActivity implements View.OnClickListener
         mFourLin.setSelected(false);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
+
+    //定义一个进度条
+    ProgressDialog pd;
+
+    //1.设置一个进度条
+    public void showProgressDialog() {
+        pd = new ProgressDialog(MainMenu.this);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setTitle("正在获取数据中");
+        pd.setMessage("请稍后...");
+        pd.show();
     }
+
+    //2.不耗时操作放在这
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (list.size()!=0) {
+               adapter.setList(list);
+               adapter.notifyDataSetChanged();
+            }else {
+                Log.e(TAG,"数据库为空!");
+            }
+            pd.dismiss();
+        }
+    };
+
+    //3.耗时操作放子线程进行
+    public void updataData() {
+        new Thread() {
+            @Override
+            public void run() {
+                //传入数据
+                //数据源
+                list = Utils.getCouponInfo(MainMenu.this);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                handler.sendEmptyMessage(1);//完成后发送消息
+            }
+        }.start();//子线程
+        showProgressDialog();//UI线程
+    }
+
+    //实现删除按钮
+    @Override
+    public void btn_onclick(int pos) {
+        CouponDao couponDao = new CouponDao(this);
+        //调用接口方法,在Activity实现
+        couponDao.delete(list.get(pos));
+        updataData();
+    }
+
 }
