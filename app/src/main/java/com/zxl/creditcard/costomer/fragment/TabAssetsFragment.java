@@ -45,9 +45,7 @@ public class TabAssetsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         mview = inflater.inflate(R.layout.fragment_tab_assets, container, false);
-
         return mview;
     }
 
@@ -60,28 +58,35 @@ public class TabAssetsFragment extends Fragment {
         //传入deleteBook对象
         //adapter.setDeleteBook(this);
         lv.setAdapter(mActivity.adapter);
-        //长按时item
+        //按item时
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pos = position;
+                pos = position;//保存位置
                 showAlertDialog();
             }
         });
     }
 
+
+
     //定义一个提示框
     AlertDialog.Builder ad;
 
     //1.设置一个提示框
-    public void showAlertDialog() {
+    private void showAlertDialog() {
         ad = new AlertDialog.Builder(mActivity)
         .setTitle("请选择")
         .setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //删除
-                mDeleteCoupon.btn_onclick(pos);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        //删除
+                        mDeleteCoupon.btn_onclick(pos);
+                    }
+                }.start();//子线程
             }
         })
         .setNegativeButton("赠送", new DialogInterface.OnClickListener() {
@@ -97,4 +102,6 @@ public class TabAssetsFragment extends Fragment {
     public void setActivity(MainMenu mainMenu) {
         this.mActivity = mainMenu;
     }
+
+
 }

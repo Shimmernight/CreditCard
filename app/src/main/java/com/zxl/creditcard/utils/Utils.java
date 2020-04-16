@@ -23,7 +23,7 @@ public class Utils {
      * @return List 数据
      */
     public static List<CouponInfo> getCouponInfo(Context context) {
-        List<CouponInfo> list = new ArrayList<>();
+        List<CouponInfo> list;
         CouponDao couponDao = new CouponDao();
         list = couponDao.query();
         return list;
@@ -42,7 +42,6 @@ public class Utils {
      */
     public static boolean deleteCouponInfo(CouponInfo couponInfo) {
         CouponDao couponDao = new CouponDao();
-
         return couponDao.delete(couponInfo);
     }
 

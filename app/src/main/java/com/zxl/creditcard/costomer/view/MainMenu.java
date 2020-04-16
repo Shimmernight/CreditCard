@@ -11,12 +11,15 @@ package com.zxl.creditcard.costomer.view;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +36,8 @@ import com.zxl.creditcard.costomer.fragment.TabCouponFragment;
 import com.zxl.creditcard.costomer.fragment.TabReceiveFragment;
 import com.zxl.creditcard.utils.Utils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener, DeleteCoupon,TransPage{
@@ -176,7 +181,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
         if (mFourFragment != null) {
             transaction.hide(mFourFragment);
         }
-
     }
 
     //初始化底部菜单选择状态
@@ -186,8 +190,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
         mThreeLin.setSelected(false);
         mFourLin.setSelected(false);
     }
-
-
 
     //定义一个进度条
     ProgressDialog pd;
@@ -210,6 +212,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                adapter.notifyDataSetChanged();
             }else {
                 Log.e(TAG,"数据库为空!");
+                Toast.makeText(MainMenu.this,"暂无票券",Toast.LENGTH_SHORT).show();
+                adapter.setList(list);
+                adapter.notifyDataSetChanged();//为空也要刷新
             }
             pd.dismiss();
         }
@@ -223,11 +228,12 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                 //传入数据
                 //数据源
                 list = Utils.getCouponInfo(MainMenu.this);
-                try {
-                    Thread.sleep(500);
+                //Log.e(TAG,""+list.toString());
+                /*try {
+                    Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
                 handler.sendEmptyMessage(1);//完成后发送消息
             }
         }.start();//子线程
@@ -239,7 +245,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     public void btn_onclick(int pos) {
         //调用接口方法,在Activity实现
         Utils.deleteCouponInfo(list.get(pos));
-        updataData();
+        Looper.prepare();
+        updataData();//刷新UI
+        Looper.loop();// 进入loop中的循环，查看消息队列
     }
 
 }
