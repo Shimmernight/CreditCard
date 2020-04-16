@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.zxl.creditcard.R;
-import com.zxl.creditcard.costomer.data.UserDao;
 import com.zxl.creditcard.costomer.view.MainMenu;
 
 import java.util.HashMap;
@@ -33,7 +32,6 @@ public class Login extends Activity {
     String TAG = "Login";
     EditText log_name;
     EditText log_key;
-    UserDao mUserDao;
     private String userName;
     private String password;
     private boolean LoginOk;
@@ -48,8 +46,6 @@ public class Login extends Activity {
         setContentView(R.layout.activity_login);
         log_name = findViewById(R.id.log_name);
         log_key = findViewById(R.id.log_key);
-        mUserDao = new UserDao(this);
-
     }
 
     //登录按钮

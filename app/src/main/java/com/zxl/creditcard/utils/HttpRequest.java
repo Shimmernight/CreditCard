@@ -12,7 +12,7 @@ public class HttpRequest {
 
     //忽略证书的认证
     private static void SkipCertificateValidation() throws Exception {
-        // Create a trust manager that does not validate certificate chains
+        // 创建一个不验证证书链的信任管理器
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;

@@ -16,7 +16,6 @@ import java.util.List;
  * @描述: ${工具类}
  **/
 public class Utils {
-
     /**
      * 获取数据
      *
@@ -25,15 +24,27 @@ public class Utils {
      */
     public static List<CouponInfo> getCouponInfo(Context context) {
         List<CouponInfo> list = new ArrayList<>();
-        CouponDao couponDao = new CouponDao(context);
+        CouponDao couponDao = new CouponDao();
         list = couponDao.query();
         return list;
-
     }
 
+    /**
+     * 上传数据
+     */
+    public static boolean putCouponInfo(CouponInfo couponInfo) {
+        CouponDao couponDao = new CouponDao();
+        return couponDao.insert(couponInfo);
+    }
 
+    /**
+     * 删除数据
+     */
+    public static boolean deleteCouponInfo(CouponInfo couponInfo) {
+        CouponDao couponDao = new CouponDao();
 
-
+        return couponDao.delete(couponInfo);
+    }
 
     /**
      * 搜索
@@ -52,11 +63,8 @@ public class Utils {
                 result.add(couponInfo);
             }
         }
-
         return result;
     }
-
-
 
 
 }

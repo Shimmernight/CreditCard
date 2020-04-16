@@ -9,7 +9,6 @@ package com.zxl.creditcard.costomer.view;
  **/
 
 import android.app.ProgressDialog;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,8 +26,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.zxl.creditcard.R;
 import com.zxl.creditcard.adpter.CouponAdapter;
 import com.zxl.creditcard.adpter.DeleteCoupon;
-import com.zxl.creditcard.costomer.data.CouponDao;
-import com.zxl.creditcard.costomer.data.DbHelper;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.costomer.fragment.TabAccountFragment;
 import com.zxl.creditcard.costomer.fragment.TabAssetsFragment;
@@ -38,12 +35,11 @@ import com.zxl.creditcard.utils.Utils;
 
 import java.util.List;
 
-public class MainMenu extends AppCompatActivity implements View.OnClickListener,DeleteCoupon,TransPage{
+public class MainMenu extends AppCompatActivity implements View.OnClickListener, DeleteCoupon,TransPage{
 
     String TAG = "MainMenu";
     private LinearLayout mOneLin, mTwoLin, mThreeLin,mFourLin;
     private ImageView mOneImg,mTwoImg,mThreeImg, mFourImg;
-
     private FrameLayout mFrameLayout;
     private TabCouponFragment mOneFragment;
     private TabAssetsFragment mTwoFragment;
@@ -52,9 +48,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     private FragmentManager manager;
     private FragmentTransaction transaction;
 
-    private  DbHelper dbHelper;
-    private SQLiteDatabase db;
-
     //将经常用的三个对象定义在上面
     List<CouponInfo> list;
     public CouponAdapter adapter;
@@ -62,10 +55,6 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        dbHelper = new DbHelper(this);
-        //获取权限
-        db = dbHelper.getWritableDatabase();
 
         initView();
         //获取FragmentManager对象
@@ -81,17 +70,14 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
         mTwoLin = findViewById(R.id.two_lin);
         mThreeLin = findViewById(R.id.three_lin);
         mFourLin = findViewById(R.id.four_lin);
-
         mOneImg=findViewById(R.id.one_img);
         mTwoImg=findViewById(R.id.two_img);
         mThreeImg=findViewById(R.id.three_img);
         mFourImg =findViewById(R.id.four_img);
-
         mOneLin.setOnClickListener(this);
         mTwoLin.setOnClickListener(this);
         mThreeLin.setOnClickListener(this);
         mFourLin.setOnClickListener(this);
-
         //适配器
         adapter = new CouponAdapter(this);
     }
@@ -251,9 +237,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     //实现删除按钮
     @Override
     public void btn_onclick(int pos) {
-        CouponDao couponDao = new CouponDao(this);
         //调用接口方法,在Activity实现
-        couponDao.delete(list.get(pos));
+        Utils.deleteCouponInfo(list.get(pos));
         updataData();
     }
 

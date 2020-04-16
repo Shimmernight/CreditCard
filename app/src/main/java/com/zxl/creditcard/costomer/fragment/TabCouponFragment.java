@@ -8,9 +8,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import com.zxl.creditcard.costomer.data.CouponDao;
 import com.zxl.creditcard.dialog.EditDialog;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.costomer.view.TransPage;
+import com.zxl.creditcard.utils.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,8 +51,8 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     String info;
 
     //日期
-    DateFormat format= DateFormat.getDateTimeInstance();
-    Calendar calendar= Calendar.getInstance(Locale.CHINA);
+    DateFormat format = DateFormat.getDateTimeInstance();
+    Calendar calendar = Calendar.getInstance(Locale.CHINA);
 
     //储存结果
     CouponInfo couponInfo;
@@ -131,30 +135,27 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
                 break;
             //修改日期
             case R.id.data:
-                //Toast.makeText(getActivity(),"data",Toast.LENGTH_SHORT).show();
-                showDatePickerDialog(getActivity(),2,data,calendar);
+                showDatePickerDialog(getActivity(), 2, data, calendar);
                 //data.setText("有效期: "+"2020.02.25 - 2020.02.25");
                 break;
             //修改印章
             case R.id.touch_inscription:
-                //Toast.makeText(getActivity(),"inscription",Toast.LENGTH_SHORT).show();
                 showEditDialog(inscription);
                 break;
             //修改内容
             case R.id.content:
-                //Toast.makeText(getActivity(),"content",Toast.LENGTH_SHORT).show();
                 showEditDialog(content);
                 break;
             //保存按钮
             case R.id.btn_OK:
-                if (name.getText().toString().equals("自定义") |
+/*                if (name.getText().toString().equals("自定义") |
                         data.getText().toString().equals("有效期:") |
-                        inscription.getText().toString().equals("某某某纪念章")|
+                        inscription.getText().toString().equals("某某某纪念章") |
                         content.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "内容不能为空,请填写完整",
                             Toast.LENGTH_SHORT).show();
                     return;
-                } else {
+                } else*/ {
                     couponInfo = new CouponInfo();
                     //获取内容
                     couponInfo.name = name.getText().toString();
@@ -167,21 +168,33 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
                     couponInfo.cid = 1;
                     couponInfo.state = "未赠送";
 
-                    CouponDao couponDao = new CouponDao(getActivity());
-                   /* if (isHave(couponInfo._id)) {
-                        Toast.makeText(getActivity(), "此ID已存在,请更改",
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }*/
-                    couponDao.insert(couponInfo);
-                    //跳转到下一页
-                    transPage.setSwPage(1);
-                    Toast.makeText(getActivity(),"创建成功",Toast.LENGTH_SHORT).show();
+                    //不能在主线程中请求网络操作
+                    final Handler handler = new Handler() {
+                        @Override
+                        public void handleMessage(@NonNull Message msg) {
+                                //清空还原
+                                name.setText("自定义");
+                                data.setText("有效期:");
+                                inscription.setText("某某某纪念章");
+                                content.setText("");
+                                photo.setImageURI(null);
+                                //跳转到下一页
+                                transPage.setSwPage(1);
+                                Toast.makeText(getActivity(), "创建成功", Toast.LENGTH_SHORT).show();
+                            }
+                    };
+                    new Thread(){
+                        @Override
+                        public void run() {
+                                Utils.putCouponInfo(couponInfo);
+                                handler.sendEmptyMessage(1);//完成后发送消息
+                            }
+                    }.start();
                 }
                 break;
             //赠送按钮
             case R.id.btn_giveTo:
-                Toast.makeText(getActivity(),"btn_giveTo",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "btn_giveTo", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -190,12 +203,13 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
 
     /**
      * 日期选择
+     *
      * @param activity
      * @param themeResId
      * @param tv
      * @param calendar
      */
-    public static void showDatePickerDialog(Activity activity, int themeResId, final TextView tv, final Calendar calendar) {
+    private static void showDatePickerDialog(Activity activity, int themeResId, final TextView tv, final Calendar calendar) {
         // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
         final int nMonth = calendar.get(Calendar.MONTH);
         final int nYear = calendar.get(Calendar.YEAR);
@@ -205,7 +219,7 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // 此处得到选择的时间
-                tv.setText("有效期：" + nYear + "." + (nMonth+1) + "." + nDay + " - "
+                tv.setText("有效期：" + nYear + "." + (nMonth + 1) + "." + nDay + " - "
                         + year + "." + (monthOfYear + 1) + "." + dayOfMonth);
             }
         }
@@ -218,10 +232,11 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
 
     //修改窗口
     TextView byView;
+
     //显示编辑框
     private void showEditDialog(TextView view) {
         byView = view;
-        mEditDialog = new EditDialog(getActivity(),R.style.loading_dialog,onClickListener);
+        mEditDialog = new EditDialog(getActivity(), R.style.loading_dialog, onClickListener);
         mEditDialog.show();
     }
 
@@ -229,12 +244,10 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_save:
-                    info = mEditDialog.text_info.getText().toString().trim();
-                    byView.setText(info);
-                    mEditDialog.dismiss();
-                    break;
+            if (v.getId() == R.id.btn_save) {
+                info = mEditDialog.text_info.getText().toString().trim();
+                byView.setText(info);
+                mEditDialog.dismiss();
             }
         }
     };

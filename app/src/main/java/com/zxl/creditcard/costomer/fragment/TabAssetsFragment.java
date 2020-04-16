@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.zxl.creditcard.R;
 import com.zxl.creditcard.adpter.DeleteCoupon;
 import com.zxl.creditcard.costomer.view.MainMenu;
+import com.zxl.creditcard.utils.Utils;
 
 
 public class TabAssetsFragment extends Fragment {
@@ -53,27 +54,20 @@ public class TabAssetsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         //拿到ListView
         lv = (ListView) mview.findViewById(R.id.lv_assets);
-
         //adapter = new CouponAdapter(mActivity);
         //传入deleteBook对象
         //adapter.setDeleteBook(this);
         lv.setAdapter(mActivity.adapter);
-
         //长按时item
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 pos = position;
                 showAlertDialog();
-
             }
         });
-
-
     }
 
     //定义一个提示框
@@ -99,7 +93,6 @@ public class TabAssetsFragment extends Fragment {
         });
         ad.show();
     }
-
 
     public void setActivity(MainMenu mainMenu) {
         this.mActivity = mainMenu;
