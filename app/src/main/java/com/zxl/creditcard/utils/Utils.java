@@ -18,14 +18,11 @@ import java.util.List;
 public class Utils {
     /**
      * 获取数据
-     *
-     * @param context 上下文
-     * @return List 数据
      */
-    public static List<CouponInfo> getCouponInfo(Context context) {
+    public static List<CouponInfo> getCouponInfo(int cid) {
         List<CouponInfo> list;
         CouponDao couponDao = new CouponDao();
-        list = couponDao.query();
+        list = couponDao.query(cid);
         return list;
     }
 

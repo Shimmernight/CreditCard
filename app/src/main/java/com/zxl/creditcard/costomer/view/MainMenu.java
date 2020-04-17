@@ -65,7 +65,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
         setContentView(R.layout.activity_menu);
         //获取当前用户数据
         bundle=this.getIntent().getExtras();
-        bundle.getInt("id");
+        id = bundle.getInt("id");
         initView();
         //获取FragmentManager对象
         manager = getSupportFragmentManager();
@@ -234,7 +234,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
             public void run() {
                 //传入数据
                 //数据源
-                list = Utils.getCouponInfo(MainMenu.this);
+                list = Utils.getCouponInfo(id);
                 //Log.e(TAG,""+list.toString());
                 /*try {
                     Thread.sleep(400);

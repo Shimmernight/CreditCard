@@ -72,14 +72,14 @@ public class CouponDao {
         db.close();*/
     }
 
-    //查询所有券 sql:select * from 表名
-    public List<CouponInfo> query() {
+    //查询当前用户所有券 sql:select * from 表名
+    public List<CouponInfo> query(int cid) {
         //加载驱动并创建连接对象
         conn = DBUtils.getConnection();
         List<CouponInfo> maps = new ArrayList<>();
         String sql;
         try {
-            sql = "select * from " + Constants.TABLE_COUPON;
+            sql = "select * from " + Constants.TABLE_COUPON+ " where cid=" +cid;
             ps = conn.prepareStatement(sql);
             // 执行sql查询语句并返回结果集
             rs = ps.executeQuery();
