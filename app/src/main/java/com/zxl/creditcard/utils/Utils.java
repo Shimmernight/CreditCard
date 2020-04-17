@@ -43,6 +43,14 @@ public class Utils {
     }
 
     /**
+     * 修改数据
+     */
+    public static boolean updateCouponInfo(CouponInfo couponInfo,String name) {
+        CouponDao couponDao = new CouponDao();
+        return couponDao.update(couponInfo,name);
+    }
+
+    /**
      * 搜索
      *
      * @param list 数据

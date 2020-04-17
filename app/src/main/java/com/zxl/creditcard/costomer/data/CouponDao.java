@@ -65,11 +65,45 @@ public class CouponDao {
     }
 
     //更新 sql:update 表名 set 修改内容 where 条件
-    public void update() {
-   /*     db.execSQL("update " + Constants.TABLE_USER + " set 名字 = '祝学梁'");
-        db.execSQL("update " + Constants.TABLE_USER + " set 账号 = 2020");
+    public boolean update(CouponInfo coupon ,String name) {
+        int id = query(name);
+        conn = DBUtils.getConnection();
+        String sql;
+        try {
+            //查询需要赠送用户的id
+            if (id>0){
+                sql = "update " + Constants.TABLE_COUPON + " set cid ="+ id +" where _id =" + coupon._id;
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.closeAll(null, ps, conn);
+        }
+        return false;
+    }
 
-        db.close();*/
+    public int query(String name){
+        conn = DBUtils.getConnection();
+        String sql;
+        int id;
+        try {
+            //查询需要赠送用户的id
+            sql = "select * from " + Constants.TABLE_USER + " where name = '"+ name+"'";//name为String类型，需要加单引号
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()){
+                id = rs.getInt(1);
+                return id;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.closeAll(rs, ps, conn);
+        }
+        return 0;
     }
 
     //查询当前用户所有券 sql:select * from 表名

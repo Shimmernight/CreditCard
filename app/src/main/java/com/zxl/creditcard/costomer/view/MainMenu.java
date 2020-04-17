@@ -9,7 +9,6 @@ package com.zxl.creditcard.costomer.view;
  **/
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.zxl.creditcard.R;
 import com.zxl.creditcard.adpter.CouponAdapter;
-import com.zxl.creditcard.adpter.DeleteCoupon;
+import com.zxl.creditcard.adpter.Coupon;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.costomer.fragment.TabAccountFragment;
 import com.zxl.creditcard.costomer.fragment.TabAssetsFragment;
@@ -37,11 +35,9 @@ import com.zxl.creditcard.costomer.fragment.TabCouponFragment;
 import com.zxl.creditcard.costomer.fragment.TabReceiveFragment;
 import com.zxl.creditcard.utils.Utils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainMenu extends AppCompatActivity implements View.OnClickListener, DeleteCoupon,TransPage{
+public class MainMenu extends AppCompatActivity implements View.OnClickListener, Coupon,TransPage{
 
     String TAG = "MainMenu";
     public int id;
@@ -249,9 +245,18 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
 
     //实现删除按钮
     @Override
-    public void btn_onclick(int pos) {
+    public void btn_delete(int pos) {
         //调用接口方法,在Activity实现
         Utils.deleteCouponInfo(list.get(pos));
+        Looper.prepare();
+        updataData();//刷新UI
+        Looper.loop();// 进入loop中的循环，查看消息队列
+    }
+    //实现赠送按钮
+    @Override
+    public void btn_update(int pos,String name) {
+        //调用接口方法,在Activity实现
+        Utils.updateCouponInfo(list.get(pos),name);
         Looper.prepare();
         updataData();//刷新UI
         Looper.loop();// 进入loop中的循环，查看消息队列

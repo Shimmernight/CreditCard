@@ -15,9 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.zxl.creditcard.R;
-import com.zxl.creditcard.adpter.DeleteCoupon;
+import com.zxl.creditcard.adpter.Coupon;
 import com.zxl.creditcard.costomer.view.MainMenu;
-import com.zxl.creditcard.utils.Utils;
 
 
 public class TabAssetsFragment extends Fragment {
@@ -25,13 +24,13 @@ public class TabAssetsFragment extends Fragment {
     //将经常用的三个对象定义在上面
     ListView lv;
     private View mview;
-    DeleteCoupon mDeleteCoupon;
+    Coupon mCoupon;
     private MainMenu mActivity;
 
     int pos;
 
-    public void setDeletCoupon(DeleteCoupon deletCoupon) {
-        this.mDeleteCoupon = deletCoupon;
+    public void setDeletCoupon(Coupon Coupon) {
+        this.mCoupon = Coupon;
     }
 
     public TabAssetsFragment() {
@@ -82,7 +81,7 @@ public class TabAssetsFragment extends Fragment {
                     @Override
                     public void run() {
                         //删除
-                        mDeleteCoupon.btn_onclick(pos);
+                        mCoupon.btn_delete(pos);
                     }
                 }.start();//子线程
             }
@@ -90,8 +89,14 @@ public class TabAssetsFragment extends Fragment {
         .setNegativeButton("赠送", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
+                //修改所属人cid和票券状态state
+                new Thread() {
+                    @Override
+                    public void run() {
+                        //修改
+                        mCoupon.btn_update(pos,"祝学梁");
+                    }
+                }.start();//子线程
             }
         });
         ad.show();

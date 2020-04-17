@@ -7,6 +7,9 @@ package com.zxl.creditcard.adpter;
  * @创建时间: 2020/4/16  17:45
  * @描述: 删除数据
  **/
-public interface DeleteCoupon {
-    void btn_onclick(int pos);
+public interface Coupon {
+    //传入位置，实现删除
+    void btn_delete(int pos);
+    //传入位置和用户名，实现赠送
+    void btn_update(int pos,String name);
 }
