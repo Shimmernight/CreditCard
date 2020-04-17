@@ -68,8 +68,6 @@ public class TabAssetsFragment extends Fragment {
         });
     }
 
-
-
     //定义一个提示框
     AlertDialog.Builder ad;
 

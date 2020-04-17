@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.zxl.creditcard.R;
 import com.zxl.creditcard.costomer.data.CouponDao;
+import com.zxl.creditcard.costomer.view.MainMenu;
 import com.zxl.creditcard.dialog.EditDialog;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.costomer.view.TransPage;
@@ -37,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -45,29 +47,23 @@ import java.util.Locale;
 
 public class TabCouponFragment extends Fragment implements View.OnClickListener {
     View view;
-
     //输入编辑框
     EditDialog mEditDialog;
     String info;
-
     //日期
     DateFormat format = DateFormat.getDateTimeInstance();
     Calendar calendar = Calendar.getInstance(Locale.CHINA);
-
     //储存结果
     CouponInfo couponInfo;
-
     TextView name;
     ImageView photo;
     TextView data;
     TextView inscription;
     View touch_inscription;
     TextView content;
-
     byte[] bytes;
-    List<Integer> list;
-
     TransPage transPage;
+    int id;
 
     public TabCouponFragment() {
 
@@ -76,7 +72,6 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -89,33 +84,11 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-      /*  //新页面接收数据
-        Bundle bundle = getActivity().getIntent().getExtras();
-
-        list = new ArrayList<>();
-        for (int i = 0; i < bundle.size(); i++) {
-            //接收id值
-            list.add(bundle.getInt("/" + i));
-        }*/
-
+        Bundle bundle = getArguments();
+        this.id = bundle.getInt("id");
         //初始化
         init();
-
     }
-/*
-
-    //判断id是否重复
-    public boolean isHave(int id) {
-        for (int i = 0; i < list.size(); i++) {
-            Log.e("sql", "compare:" + list.get(i));
-            Log.e("sql", "compare2:" + id);
-            if (list.get(i) == id) {
-                return true;
-            }
-        }
-        return false;
-    }
-*/
 
     /*键盘响应*/
     @Override
@@ -165,7 +138,7 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
                     couponInfo.photo = bytes;
 
                     //可能变更的内容
-                    couponInfo.cid = 1;
+                    couponInfo.cid = id;
                     couponInfo.state = "未赠送";
 
                     //不能在主线程中请求网络操作
@@ -200,14 +173,8 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
 
     }
 
-
     /**
      * 日期选择
-     *
-     * @param activity
-     * @param themeResId
-     * @param tv
-     * @param calendar
      */
     private static void showDatePickerDialog(Activity activity, int themeResId, final TextView tv, final Calendar calendar) {
         // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
@@ -239,7 +206,6 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
         mEditDialog = new EditDialog(getActivity(), R.style.loading_dialog, onClickListener);
         mEditDialog.show();
     }
-
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -275,10 +241,7 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
                     // Toast.makeText(AddActivity.this, "logo不能为空,请填写完整",Toast.LENGTH_SHORT).show();
                 }
             }
-
         }
-
-
     }
 
 

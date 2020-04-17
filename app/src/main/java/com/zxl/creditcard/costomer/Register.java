@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.zxl.creditcard.R;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,12 +33,9 @@ public class Register extends Activity {
     EditText reg_reKey;
     EditText reg_phone_number;
     //UserDao mUserDao;
-
     String url = "http://101.201.143.123:8080/registerServlet";
     Map<String,Object> connect = new HashMap<>();
-    private boolean NameHaven = false;
-    private boolean PhoneHaven = false;
-
+    JSONObject res;
     String newName;
     String password;
     String newPhone;
@@ -45,18 +44,14 @@ public class Register extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         //mUserDao = new UserDao(this);
-
         reg_name = (EditText) findViewById(R.id.reg_name);
         reg_key = (EditText) findViewById(R.id.reg_key);
         reg_phone_number = (EditText) findViewById(R.id.reg_phone_number);
         reg_reKey = (EditText) findViewById(R.id.reg_reKey);
-
         setOnFocusChangeErrMsg(reg_phone_number, "phone", "手机号不合法");
         setOnFocusChangeErrMsg(reg_key, "password", "密码小于6位数");
         setOnFocusChangeErrMsg(reg_reKey, "rePassword", "输入不一致");
-
     }
 
     //注册按钮
@@ -184,17 +179,17 @@ public class Register extends Activity {
         pd.show();
     }
 
-    String state = null;
+    boolean registerOK = false;
     //2.不耗时操作放在这
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            if (state.equals("注册成功")){
+            if (registerOK){
                 Toast.makeText(Register.this, "注册成功", Toast.LENGTH_SHORT).show();
                 //跳回登录
                 finish();
             } else {
-                Toast.makeText(Register.this, state, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this, "注册失败", Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();
         }
@@ -207,7 +202,10 @@ public class Register extends Activity {
             public void run() {
                 try {
                     //状态
-                    state = postRequestWithAuth(url,connect);
+                    res = postRequestWithAuth(url,connect);
+                    if (res!=null) {
+                        registerOK = res.optBoolean("OK");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -9,6 +9,7 @@ package com.zxl.creditcard.costomer.view;
  **/
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,6 +44,7 @@ import java.util.List;
 public class MainMenu extends AppCompatActivity implements View.OnClickListener, DeleteCoupon,TransPage{
 
     String TAG = "MainMenu";
+    public int id;
     private LinearLayout mOneLin, mTwoLin, mThreeLin,mFourLin;
     private ImageView mOneImg,mTwoImg,mThreeImg, mFourImg;
     private FrameLayout mFrameLayout;
@@ -52,6 +54,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     private TabAccountFragment mFourFragment;
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    Bundle bundle;
 
     //将经常用的三个对象定义在上面
     List<CouponInfo> list;
@@ -60,7 +63,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        //获取当前用户数据
+        bundle=this.getIntent().getExtras();
+        bundle.getInt("id");
         initView();
         //获取FragmentManager对象
         manager = getSupportFragmentManager();
@@ -119,11 +124,13 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                 mOneLin.setSelected(true);
                 if (mOneFragment == null) {
                     mOneFragment = new TabCouponFragment();
+                    mOneFragment.setArguments(bundle);
                     mOneFragment.setTransPage(this);
                     transaction.add(R.id.fl_container, mOneFragment);
                 } else {
                     //如果对应的Fragment已经实例化，则直接显示出来
                     transaction.show(mOneFragment);
+                    //mOneFragment.setArguments(bundle);
                 }
                 break;
             case 1:

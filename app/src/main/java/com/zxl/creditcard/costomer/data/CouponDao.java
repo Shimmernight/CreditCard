@@ -29,14 +29,15 @@ public class CouponDao {
         String sql;
         try {
             sql = "insert into " + Constants.TABLE_COUPON +
-                    " (name,photo,_data,inscription,content,state) values (?,?,?,?,?,?)";
+                    " (cid,name,photo,_data,inscription,content,state) values (?,?,?,?,?,?,?)";
             ps = conn.prepareStatement(sql);
-            ps.setString(1, coupon.name);
-            ps.setBytes(2, coupon.photo);
-            ps.setString(3, coupon._data);
-            ps.setString(4, coupon.inscription);
-            ps.setString(5, coupon.content);
-            ps.setString(6, coupon.state);
+            ps.setInt(1, coupon.cid);
+            ps.setString(2, coupon.name);
+            ps.setBytes(3, coupon.photo);
+            ps.setString(4, coupon._data);
+            ps.setString(5, coupon.inscription);
+            ps.setString(6, coupon.content);
+            ps.setString(7, coupon.state);
             ps.execute();
             return true;
         } catch (SQLException e) {

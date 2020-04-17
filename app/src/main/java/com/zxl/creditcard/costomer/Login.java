@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import com.zxl.creditcard.R;
 import com.zxl.creditcard.costomer.view.MainMenu;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +40,7 @@ public class Login extends Activity {
 
     String url = "http://101.201.143.123:8080/loginServlet";
     Map<String,Object> connect = new HashMap<>();
-    String state;
+    JSONObject res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class Login extends Activity {
         pd.show();
     }
 
+    int id;
     //2.不耗时操作放在这
     Handler handler = new Handler() {
         @Override
@@ -88,8 +91,11 @@ public class Login extends Activity {
             if (LoginOk) {
                 Toast.makeText(Login.this, "登陆成功", Toast.LENGTH_SHORT).show();
                 Toast.makeText(Login.this, "Hello " + userName, Toast.LENGTH_SHORT).show();
+                Bundle bundle=new Bundle();
+                bundle.putInt("id", id);
                 //跳转
                 Intent intent = new Intent(Login.this, MainMenu.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
             } else {
@@ -109,19 +115,14 @@ public class Login extends Activity {
                 connect.put("password",password);
                 try {
                     //登录状态
-                    state = postRequestWithAuth(url,connect);
-                    switch (state){
-                        case "登录成功":
-                            LoginOk = true;
-                            break;
-                        case "登录失败":
-                            LoginOk = false;
-                            break;
-                        default:
-                            break;
+                    res = postRequestWithAuth(url,connect);
+                    if (res!=null){
+                        LoginOk = res.optBoolean("OK");
+                        //获取用户数据
+                        if (LoginOk){
+                            id = res.optInt("id");
+                        }
                     }
-                    //获取用户数据
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG,"链接失效");
@@ -136,6 +137,4 @@ public class Login extends Activity {
         }.start();//子线程
         showProgressDialog();//UI线程
     }
-
-
 }
