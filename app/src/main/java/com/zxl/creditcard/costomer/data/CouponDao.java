@@ -3,6 +3,7 @@ package com.zxl.creditcard.costomer.data;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.utils.CloseUtil;
 import com.zxl.creditcard.utils.DBUtils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,14 +66,14 @@ public class CouponDao {
     }
 
     //更新 sql:update 表名 set 修改内容 where 条件
-    public boolean update(CouponInfo coupon ,String name) {
-        int id = query(name);
+    public boolean update(CouponInfo coupon, int id, String userName) {
         conn = DBUtils.getConnection();
         String sql;
         try {
-            //查询需要赠送用户的id
-            if (id>0){
-                sql = "update " + Constants.TABLE_COUPON + " set cid ="+ id +" where _id =" + coupon._id;
+
+            if (id > 0) {
+                sql = "update " + Constants.TABLE_COUPON + " set cid =" + id + " ,state ='" + userName +
+                        "赠'" + " where _id =" + coupon._id;
                 ps = conn.prepareStatement(sql);
                 ps.execute();
                 return true;
@@ -85,16 +86,17 @@ public class CouponDao {
         return false;
     }
 
-    public int query(String name){
+    //查询需要赠送用户的id
+    public int query(String name) {
         conn = DBUtils.getConnection();
         String sql;
         int id;
         try {
             //查询需要赠送用户的id
-            sql = "select * from " + Constants.TABLE_USER + " where name = '"+ name+"'";//name为String类型，需要加单引号
+            sql = "select * from " + Constants.TABLE_USER + " where name = '" + name + "'";//name为String类型，需要加单引号
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 id = rs.getInt(1);
                 return id;
             }
@@ -107,13 +109,13 @@ public class CouponDao {
     }
 
     //查询当前用户所有券 sql:select * from 表名
-    public List<CouponInfo> query(int cid) {
+    public List<CouponInfo> query(int cid, String state) {
         //加载驱动并创建连接对象
         conn = DBUtils.getConnection();
         List<CouponInfo> maps = new ArrayList<>();
         String sql;
         try {
-            sql = "select * from " + Constants.TABLE_COUPON+ " where cid=" +cid;
+            sql = "select * from " + Constants.TABLE_COUPON + " where cid=" + cid + " and " + state + " state ='未赠送'";
             ps = conn.prepareStatement(sql);
             // 执行sql查询语句并返回结果集
             rs = ps.executeQuery();

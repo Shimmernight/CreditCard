@@ -17,12 +17,19 @@ import java.util.List;
  **/
 public class Utils {
     /**
-     * 获取数据
+     * 获取P2数据
      */
-    public static List<CouponInfo> getCouponInfo(int cid) {
-        List<CouponInfo> list;
+    public static List<CouponInfo> getCouponInfo(int cid, int page) {
+        List<CouponInfo> list = null;
         CouponDao couponDao = new CouponDao();
-        list = couponDao.query(cid);
+        switch (page){
+            case 2:
+                list = couponDao.query(cid,"");
+                break;
+            case 3:
+                list = couponDao.query(cid,"not");
+                break;
+        }
         return list;
     }
 
@@ -45,9 +52,19 @@ public class Utils {
     /**
      * 修改数据
      */
-    public static boolean updateCouponInfo(CouponInfo couponInfo,String name) {
+    public static boolean updateCouponInfo(CouponInfo couponInfo,int id,String userName) {
         CouponDao couponDao = new CouponDao();
-        return couponDao.update(couponInfo,name);
+        if (id>0){
+            return couponDao.update(couponInfo,id,userName);
+        }else return false;
+    }
+
+    /**
+     * 查询数据
+     */
+    public static int queryID(String name) {
+        CouponDao couponDao = new CouponDao();
+        return couponDao.query(name);
     }
 
     /**

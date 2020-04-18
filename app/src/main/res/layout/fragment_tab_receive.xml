@@ -7,32 +7,26 @@
     android:layout_marginTop="30dp"
     android:layout_marginLeft="30dp"
     android:layout_marginRight="30dp"
-    android:layout_marginBottom="50dp">
+    android:layout_marginBottom="100dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Receive"
         android:textSize="23sp"/>
-
     <!--内容-->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
         android:layout_marginTop="110dp">
-
 
         <!--listview的标签-->
         <ListView
-            android:id="@+id/lv_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
-
-
+            android:id="@+id/lv_receive"
+            android:layout_width="350dp"
+            android:layout_height="450dp"
+            android:divider="@null"
+            android:dividerHeight="20dp" />
+    </RelativeLayout>
 
 </FrameLayout>

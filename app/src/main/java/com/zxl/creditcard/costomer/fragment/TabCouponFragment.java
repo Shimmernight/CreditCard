@@ -64,9 +64,9 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     byte[] bytes;
     TransPage transPage;
     int id;
+    String userName;
 
     public TabCouponFragment() {
-
     }
 
     @Override
@@ -86,6 +86,7 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         this.id = bundle.getInt("id");
+        this.userName = bundle.getString("name");
         //初始化
         init();
     }

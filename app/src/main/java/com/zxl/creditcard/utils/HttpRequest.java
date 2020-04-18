@@ -57,7 +57,6 @@ public class HttpRequest {
      * @param urlStr 接口请求链接
      */
     public static JSONObject postRequestWithAuth(String urlStr, Map<String, Object> params) throws Exception {
-        HashMap res = new HashMap<>();
         SkipCertificateValidation();//跳过证书认证
         URL url = new URL(urlStr);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -69,7 +68,7 @@ public class HttpRequest {
         //设置请求要加的参数
         SetRequestValue(con.getOutputStream(), params);
 
-        con.setConnectTimeout(5000);
+        con.setConnectTimeout(2000);
         int code = con.getResponseCode();
         if (code != 200) {
             System.out.println("接口发生未处理异常，请求状态码：" + code);
@@ -80,32 +79,7 @@ public class HttpRequest {
         InputStreamReader reader = new InputStreamReader(con.getInputStream(), "GB2312");
         BufferedReader buffer = new BufferedReader(reader);
         String str = buffer.readLine();
-        JSONObject object = new JSONObject(str);
-        return object;
-    }
-
-    /**
-     * 解决gson默认将int转换为double
-     */
-    public HashMap<String, Object> gsonToMap(String strJson) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(
-                        new TypeToken<HashMap<String, Object>>() {
-                        }.getType(),
-                        new JsonDeserializer<HashMap<String, Object>>() {
-                            @Override
-                            public HashMap<String, Object> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                                HashMap<String, Object> hashMap = new HashMap<>();
-                                JsonObject jsonObject = json.getAsJsonObject();
-                                Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
-                                for (Map.Entry<String, JsonElement> entry : entrySet) {
-                                    hashMap.put(entry.getKey(), entry.getValue());
-                                }
-                                return hashMap;
-                            }
-                        }).create();
-
-        return gson.fromJson(strJson, new TypeToken<HashMap<String, Object>>() {}.getType());
+        return new JSONObject(str);
     }
 
     //将参数拼接起来

@@ -30,7 +30,6 @@ public class EditDialog extends Dialog {
     public EditText text_info;
     // 点击事件
     private View.OnClickListener mClickListener;
-    // 构造方法
 
     public EditDialog(Activity context) {
         super(context);

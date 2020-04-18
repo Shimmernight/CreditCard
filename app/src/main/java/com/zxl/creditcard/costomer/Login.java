@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -84,6 +83,7 @@ public class Login extends Activity {
     }
 
     int id;
+    String name;
     //2.不耗时操作放在这
     Handler handler = new Handler() {
         @Override
@@ -93,6 +93,7 @@ public class Login extends Activity {
                 Toast.makeText(Login.this, "Hello " + userName, Toast.LENGTH_SHORT).show();
                 Bundle bundle=new Bundle();
                 bundle.putInt("id", id);
+                bundle.putString("name", name);
                 //跳转
                 Intent intent = new Intent(Login.this, MainMenu.class);
                 intent.putExtras(bundle);
@@ -121,17 +122,17 @@ public class Login extends Activity {
                         //获取用户数据
                         if (LoginOk){
                             id = res.optInt("id");
+                            name = res.optString("name");
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(TAG,"链接失效");
                 }
-                try {
+/*                try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
                 handler.sendEmptyMessage(1);//完成后发送消息
             }
         }.start();//子线程

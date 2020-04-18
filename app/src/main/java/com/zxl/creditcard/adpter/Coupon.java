@@ -11,5 +11,5 @@ public interface Coupon {
     //传入位置，实现删除
     void btn_delete(int pos);
     //传入位置和用户名，实现赠送
-    void btn_update(int pos,String name);
+    void btn_update(int pos,int id);
 }

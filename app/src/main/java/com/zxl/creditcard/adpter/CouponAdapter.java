@@ -61,13 +61,13 @@ public class CouponAdapter extends BaseAdapter {
             holder._data = convertView.findViewById(R.id.item_data);
             holder.inscription =  convertView.findViewById(R.id.item_inscription);
             holder.content =  convertView.findViewById(R.id.item_content);
+            holder.state =  convertView.findViewById(R.id.item_state);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         //设置数据
         CouponInfo coupon = list.get(position);
-
         //byte转bitmap
         if (coupon.photo!=null) {
             holder.photo.setImageBitmap(Bytes2Bimap(coupon.photo));
@@ -76,6 +76,7 @@ public class CouponAdapter extends BaseAdapter {
         holder._data.setText(coupon._data);
         holder.inscription.setText(coupon.inscription);
         holder.content.setText(coupon.content);
+        holder.state.setText(coupon.state);
         return convertView;
     }
 
@@ -88,6 +89,7 @@ public class CouponAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
+        TextView state;
         ImageView photo;
         TextView name;
         TextView _data;
