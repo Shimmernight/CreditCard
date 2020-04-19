@@ -1,14 +1,18 @@
 package com.zxl.creditcard.costomer.data;
 
+import android.util.Log;
+
 import com.zxl.creditcard.costomer.entity.CouponInfo;
 import com.zxl.creditcard.utils.CloseUtil;
 import com.zxl.creditcard.utils.DBUtils;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -84,6 +88,46 @@ public class CouponDao {
             CloseUtil.closeAll(null, ps, conn);
         }
         return false;
+    }
+
+    //更新头像
+    public boolean update(int id,byte[] bytes) {
+        conn = DBUtils.getConnection();
+        String sql;
+        try {
+            sql = "update " + Constants.TABLE_USER + " set logo = ? where _id =" + id;
+            Log.e("up",""+new String(bytes).length());
+            ps = conn.prepareStatement(sql);
+            ps.setBytes(1,bytes);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.closeAll(null, ps, conn);
+        }
+        return false;
+    }
+
+    //获取头像
+    public byte[] query(int id) {
+        conn = DBUtils.getConnection();
+        String sql;
+        byte[] bytes;
+        try {
+            sql = "select logo from " + Constants.TABLE_USER + " where _id = " + id ;
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                bytes = rs.getBytes(1);
+                return bytes;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            CloseUtil.closeAll(null, ps, conn);
+        }
+        return null;
     }
 
     //查询需要赠送用户的id

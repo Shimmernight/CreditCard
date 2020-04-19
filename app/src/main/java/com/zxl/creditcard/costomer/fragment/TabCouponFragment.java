@@ -51,7 +51,6 @@ public class TabCouponFragment extends Fragment implements View.OnClickListener 
     EditDialog mEditDialog;
     String info;
     //日期
-    DateFormat format = DateFormat.getDateTimeInstance();
     Calendar calendar = Calendar.getInstance(Locale.CHINA);
     //储存结果
     CouponInfo couponInfo;

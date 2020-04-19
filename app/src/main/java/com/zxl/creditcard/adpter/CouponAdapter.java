@@ -3,6 +3,7 @@ package com.zxl.creditcard.adpter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,7 @@ public class CouponAdapter extends BaseAdapter {
         CouponInfo coupon = list.get(position);
         //byte转bitmap
         if (coupon.photo!=null) {
-            holder.photo.setImageBitmap(Bytes2Bimap(coupon.photo));
+            holder.photo.setImageBitmap(Bytes2Bitmap(coupon.photo));
         }
         holder.name.setText(coupon.name);
         holder._data.setText(coupon._data);
@@ -80,7 +81,7 @@ public class CouponAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private Bitmap Bytes2Bimap(byte[] b) {
+    private Bitmap Bytes2Bitmap(byte[] b) {
         if (b.length != 0) {
             return BitmapFactory.decodeByteArray(b, 0, b.length);
         } else {

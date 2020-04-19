@@ -139,6 +139,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                 mTwoLin.setSelected(true);
                 if (mTwoFragment == null) {
                     mTwoFragment = new TabAssetsFragment();
+                    mTwoFragment.setArguments(bundle);
                     mTwoFragment.setDeleteCoupon(this);
                     mTwoFragment.setActivity(this);
                     transaction.add(R.id.fl_container, mTwoFragment);
@@ -154,6 +155,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                 mThreeLin.setSelected(true);
                 if (mThreeFragment == null) {
                     mThreeFragment = new TabReceiveFragment();
+                    mThreeFragment.setArguments(bundle);
                     mThreeFragment.setDeleteCoupon(this);
                     mThreeFragment.setActivity(this);
                     transaction.add(R.id.fl_container, mThreeFragment);
@@ -169,6 +171,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener,
                 mFourLin.setSelected(true);
                 if (mFourFragment == null) {
                     mFourFragment = new TabAccountFragment();
+                    mFourFragment.setArguments(bundle);
                     transaction.add(R.id.fl_container, mFourFragment);
                 } else {
                     //如果对应的Fragment已经实例化，则直接显示出来

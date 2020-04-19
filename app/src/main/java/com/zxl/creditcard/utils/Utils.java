@@ -1,6 +1,9 @@
 package com.zxl.creditcard.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.zxl.creditcard.costomer.data.CouponDao;
 import com.zxl.creditcard.costomer.entity.CouponInfo;
@@ -17,7 +20,7 @@ import java.util.List;
  **/
 public class Utils {
     /**
-     * 获取P2数据
+     * 获取数据
      */
     public static List<CouponInfo> getCouponInfo(int cid, int page) {
         List<CouponInfo> list = null;
@@ -32,6 +35,14 @@ public class Utils {
         }
         return list;
     }
+    /**
+     * 获取头像
+     */
+    public static byte[] getLogo(int id) {
+        CouponDao couponDao = new CouponDao();
+        byte[] bytes = couponDao.query(id);
+        return bytes;
+    }
 
     /**
      * 上传数据
@@ -39,6 +50,14 @@ public class Utils {
     public static boolean putCouponInfo(CouponInfo couponInfo) {
         CouponDao couponDao = new CouponDao();
         return couponDao.insert(couponInfo);
+    }
+
+    /**
+     * 修改头像
+     */
+    public static boolean setLogo(int id,byte[] bytes) {
+        CouponDao couponDao = new CouponDao();
+        return couponDao.update(id,bytes);
     }
 
     /**
