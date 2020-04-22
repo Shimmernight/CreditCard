@@ -180,6 +180,7 @@ public class Register extends Activity {
     }
 
     boolean registerOK = false;
+    String error;
     //2.不耗时操作放在这
     Handler handler = new Handler() {
         @Override
@@ -189,7 +190,7 @@ public class Register extends Activity {
                 //跳回登录
                 finish();
             } else {
-                Toast.makeText(Register.this, "注册失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Register.this, error, Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();
         }
@@ -204,7 +205,11 @@ public class Register extends Activity {
                     //状态
                     res = postRequestWithAuth(url,connect);
                     if (res!=null) {
-                        registerOK = res.optBoolean("OK");
+                        if (!res.optString("error").isEmpty()){
+                            error=res.optString("error");
+                        }else {
+                            registerOK = res.optBoolean("OK");
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
